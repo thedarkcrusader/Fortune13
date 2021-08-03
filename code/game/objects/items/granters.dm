@@ -769,10 +769,14 @@
 /obj/item/book/granter/crafting_recipe/blueprint/trapper
 	name = "guide to minelaying"
 	icon_state = "blueprint2"
+<<<<<<< HEAD
 	crafting_recipe_types = list(
 		/datum/crafting_recipe/shrapnelmine,
 		/datum/crafting_recipe/explosivemine,
 		)
+=======
+	crafting_recipe_types = list(/datum/crafting_recipe/shrapnelmine)
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 
 /*
 /obj/item/book/granter/crafting_recipe/blueprint/fnfal
@@ -807,7 +811,7 @@
 	granted_trait = TRAIT_BIG_LEAGUES
 	traitname = "big_leagues"
 	remarks = list("Grognak hit the Death Knight only once, but that was enough.", "Grognak is surprisingly agile, never committing too heavily on an attack, dancing between his enemies.", "Grognak isn't good at talking, but he knows it has its place. He has friends to talk for him.", "Other barbarians might change their weapons, but Grognak could never leave his beloved axe.")
-
+	
 /obj/item/book/granter/trait/lowsurgery
 	name = "First Aid Pamphlet"
 	desc = "A flimsy collection of vital tips and tricks for the average American with a sudden injury."

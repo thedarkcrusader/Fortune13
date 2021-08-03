@@ -8,8 +8,6 @@
 	thermal_conductivity = 0
 	heat_capacity = 700000
 
-	can_plant_mine = FALSE
-
 	var/destination_z
 	var/destination_x
 	var/destination_y
@@ -134,7 +132,7 @@
 
 /turf/open/space/Entered(atom/movable/A, atom/OldLoc)
 	. = ..()
-
+	
 	var/turf/old = get_turf(OldLoc)
 	if(!isspaceturf(old) && ismob(A))
 		var/mob/M = A

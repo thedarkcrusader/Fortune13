@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //Code improvements from https://github.com/vlggms/fortune13/pull/5
 
 /obj/item/deployable_mine
@@ -72,6 +73,8 @@
 	log_combat(user, src, "planted and armed")
 	qdel(src)
 
+=======
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 /obj/effect/mine
 	name = "dummy mine"
 	desc = "Better stay away from that thing."
@@ -81,42 +84,23 @@
 	icon_state = "uglymine"
 	/// We manually check to see if we've been triggered in case multiple atoms cross us in the time between the mine being triggered and it actually deleting, to avoid a race condition with multiple detonations
 	var/triggered = FALSE
-	var/smart_mine = FALSE
-	var/disarm_time = 20 SECONDS
-	var/disarm_product = /obj/item/deployablemine // The item dropped on disarm.
-
-/obj/effect/mine/attackby(obj/I, mob/user, params)
-	if(istype(I, /obj/item/multitool))
-		to_chat(user, "<span class='notice'>You begin to disarm the [src]...</span>")
-		if(do_after(user, disarm_time, target = src))
-			to_chat(user, "<span class='notice'>You disarm the [src].</span>")
-			new disarm_product(src.loc)
-			qdel(src)
-			return
-	return ..()
 
 /obj/effect/mine/proc/mineEffect(mob/victim)
 	to_chat(victim, "<span class='danger'>*click*</span>")
 
 /obj/effect/mine/Crossed(atom/movable/AM)
+<<<<<<< HEAD
 	if(!isturf(loc) || AM.throwing || (AM.movement_type & (FLYING | FLOATING)) || !AM.has_gravity())
+=======
+	if(triggered || !isturf(loc))
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 		return
 	. = ..()
 
-	if(ismob(AM))
-		checksmartmine(AM)
-	else
-		triggermine(AM)
+	if(AM.movement_type & FLYING)
+		return
 
-/obj/effect/mine/proc/checksmartmine(mob/target)
-	if(target)
-		if(smart_mine) // Smart mine
-			if(!HAS_TRAIT(target, TRAIT_MINDSHIELD)) // Target doesn't have a mindshield
-				triggermine(target)
-			else if(istype(target.get_item_by_slot(ITEM_SLOT_HEAD), /obj/item/clothing/head/foilhat)) // Has mindshield AND tinfoil hat
-				triggermine(target)
-		else // Dumb mine
-			triggermine(target)
+	triggermine(AM)
 
 /obj/effect/mine/proc/triggermine(mob/victim)
 	if(triggered)
@@ -126,19 +110,21 @@
 	s.set_up(3, 1, src)
 	s.start()
 	mineEffect(victim)
-	triggered = TRUE
-	SEND_SIGNAL(src, COMSIG_MINE_TRIGGERED, victim)
+	SEND_SIGNAL(src, COMSIG_MINE_TRIGGERED)
+	triggered = 1
 	qdel(src)
 
 /obj/effect/mine/take_damage(damage_amount, damage_type, damage_flag, sound_effect, attack_dir)
 	. = ..()
 	triggermine()
 
-/* Explosive Mines */
 /obj/effect/mine/explosive
 	name = "explosive mine"
+<<<<<<< HEAD
 	disarm_product = /obj/item/deployablemine/explosive
 	disarm_time = 3 SECONDS
+=======
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 	var/range_devastation = 0
 	var/range_heavy = 1
 	var/range_light = 2
@@ -147,15 +133,14 @@
 /obj/effect/mine/explosive/mineEffect(mob/victim)
 	explosion(loc, range_devastation, range_heavy, range_light, range_flash)
 
-/* Stun Mines */
+
 /obj/effect/mine/stun
 	name = "stun mine"
-	disarm_product = /obj/item/deployablemine/stun
-	var/stun_time = 150
-	var/damage = 0
+	var/stun_time = 80
 
 /obj/effect/mine/stun/mineEffect(mob/living/victim)
 	if(isliving(victim))
+<<<<<<< HEAD
 		victim.adjustStaminaLoss(stun_time)
 		victim.adjustBruteLoss(damage)
 
@@ -183,20 +168,23 @@
 	name = "shrapnel mine"
 	disarm_time = 3 SECONDS
 	disarm_product = /obj/item/deployablemine/shrapnel
+=======
+		victim.DefaultCombatKnockdown(stun_time)
+
+/obj/effect/mine/shrapnel
+	name = "shrapnel mine"
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 	var/shrapnel_type = /obj/item/projectile/bullet/shrapnel
 	var/shrapnel_magnitude = 3
-	var/explosive = TRUE
 
 /obj/effect/mine/shrapnel/mineEffect(mob/victim)
 	AddComponent(/datum/component/pellet_cloud, projectile_type=shrapnel_type, magnitude=shrapnel_magnitude)
-	if(explosive)
-		explosion(loc, 0, 0, 2, 2)
+	explosion(loc, 0, 0, 2, 2)
 
 /obj/effect/mine/shrapnel/sting
 	name = "stinger mine"
 	shrapnel_type = /obj/item/projectile/bullet/pellet/stingball
 
-/* Meme mine */
 /obj/effect/mine/kickmine
 	name = "kick mine"
 
@@ -205,35 +193,37 @@
 		to_chat(victim, "<span class='userdanger'>You have been kicked FOR NO REISIN!</span>")
 		qdel(victim.client)
 
-/* Gas Mines */
+
 /obj/effect/mine/gas
 	name = "oxygen mine"
-	disarm_product = /obj/item/deployablemine/gas
 	var/gas_amount = 360
 	var/gas_type = "o2"
 
 /obj/effect/mine/gas/mineEffect(mob/victim)
 	atmos_spawn_air("[gas_type]=[gas_amount]")
 
+
 /obj/effect/mine/gas/plasma
+<<<<<<< HEAD
 	name = "incendiary mine"
+=======
+	name = "plasma mine"
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 	gas_type = "plasma"
-	disarm_product = /obj/item/deployablemine/plasma
+
 
 /obj/effect/mine/gas/n2o
 	name = "\improper N2O mine"
 	gas_type = "n2o"
-	disarm_product = /obj/item/deployablemine/sleepy
 
-/* Sound mines */
-/obj/effect/mine/sound
-	name = "interesting mine"
-	var/sound = 'sound/effects/snap.ogg'
-
+/* Some error
 /obj/effect/mine/sound/mineEffect(mob/victim)
 	playsound(loc, sound, 100, 1)
 
-/* Pickups */
+/obj/effect/mine/sound/bwoink
+	name = "bwoink mine"
+	sound = 'sound/effects/adminhelp.ogg'
+*/
 /obj/effect/mine/pickup
 	name = "pickup"
 	desc = "pick me up"

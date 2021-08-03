@@ -17,8 +17,11 @@
 	clawfootstep = FOOTSTEP_LAVA
 	heavyfootstep = FOOTSTEP_LAVA
 
+<<<<<<< HEAD
 	can_plant_mine = FALSE
 
+=======
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 /turf/open/lava/ex_act(severity, target)
 	contents_explosion(severity, target)
 

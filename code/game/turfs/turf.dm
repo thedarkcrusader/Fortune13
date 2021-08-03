@@ -49,8 +49,12 @@
 	var/base_opacity = FALSE
 	///Lazylist of movable atoms providing opacity sources.
 	var/list/atom/movable/opacity_sources
+<<<<<<< HEAD
 	///If a landmine can be planted on the turf.
 	var/can_plant_mine = FALSE
+=======
+
+>>>>>>> parent of cf7d96549b (Mines attempt 2)
 
 /turf/vv_edit_var(var_name, var_value)
 	var/static/list/banned_edits = list("x", "y", "z")
